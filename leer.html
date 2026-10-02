@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leyendo…</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="lector-body">
+  <header class="barra-lector">
+    <a href="index.html" class="volver">← Biblioteca</a>
+    <span id="titulo-historia" class="titulo-bar"></span>
+    <div class="acciones-lector">
+      <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">
+        <span id="icono-tema">☾</span>
+      </button>
+      <button id="btn-ajustes" class="btn-ajustes" aria-label="Ajustes">Aa</button>
+    </div>
+  </header>
+
+  <aside id="panel-ajustes" class="panel-ajustes" hidden>
+    <h3>Apariencia</h3>
+
+    <div class="grupo">
+      <label>Tema</label>
+      <div class="temas">
+        <button data-tema="claro" class="swatch" style="--c:#fafafa;--t:#2b2b2b" aria-label="Claro"></button>
+        <button data-tema="sepia" class="swatch" style="--c:#f4ecd8;--t:#4a3f35" aria-label="Sepia"></button>
+        <button data-tema="oscuro" class="swatch" style="--c:#1c1c1e;--t:#e4e4e6" aria-label="Oscuro"></button>
+        <button data-tema="negro" class="swatch" style="--c:#000;--t:#cfcfcf" aria-label="Negro"></button>
+      </div>
+    </div>
+
+    <div class="grupo">
+      <label>Tipografía</label>
+      <div class="fuentes">
+        <button data-fuente="serif">Serif</button>
+        <button data-fuente="sans">Sans</button>
+        <button data-fuente="dislexia">Verdana</button>
+      </div>
+    </div>
+
+    <div class="grupo">
+      <label>Tamaño <span id="val-tamano">18</span>px</label>
+      <input type="range" id="rango-tamano" min="14" max="28" step="1" value="18">
+    </div>
+
+    <div class="grupo">
+      <label>Interlineado <span id="val-inter">1.8</span></label>
+      <input type="range" id="rango-inter" min="1.4" max="2.4" step="0.1" value="1.8">
+    </div>
+
+    <div class="grupo">
+      <label>Ancho de lectura <span id="val-ancho">680</span>px</label>
+      <input type="range" id="rango-ancho" min="480" max="900" step="20" value="680">
+    </div>
+  </aside>
+
+  <main class="lector">
+    <h1 id="titulo-capitulo"></h1>
+    <article id="contenido" class="contenido-protegido"></article>
+
+    <nav class="nav-capitulos">
+      <a id="prev" class="nav-btn" href="#">← Anterior</a>
+      <a id="next" class="nav-btn" href="#">Siguiente →</a>
+    </nav>
+  </main>
+
+  <script src="js/tema.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/lector.js"></script>
+</body>
+</html>
