@@ -53,7 +53,17 @@
 
 /* ---------- Anti-captura: desenfoque al perder foco ---------- */
 (function () {
-  const DURACION_MINIMA = 200; // ms
+  // En iOS Safari, 'blur' se dispara al tocar la barra de direcciones,
+  // al hacer scroll, etc. Por eso lo desactivamos en dispositivos
+  // táctiles / móviles. Solo funciona en escritorio.
+  const esTactil = ('ontouchstart' in window) ||
+                   (navigator.maxTouchPoints > 0);
+  const esMovil = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  if (esTactil || esMovil) return;
+
+  const DURACION_MINIMA = 400;  // ms: ignora parpadeos rápidos
+  let ultimaPerdida = 0;
 
   function desenfocar() {
     document.body.classList.add('captura-bloqueada');
@@ -61,8 +71,6 @@
   function enfocar() {
     document.body.classList.remove('captura-bloqueada');
   }
-
-  let ultimaPerdida = 0;
 
   window.addEventListener('blur', () => {
     ultimaPerdida = Date.now();
