@@ -25,36 +25,10 @@ body {
   color: var(--texto);
   font-family: 'Helvetica Neue', system-ui, sans-serif;
   line-height: 1.6;
-  transition: filter .25s ease, background .3s, color .3s;
+  transition: background .3s, color .3s;
 }
 
 img { max-width: 100%; height: auto; display: block; }
-
-/* ============================================================
-   ANTI-CAPTURA
-   ============================================================ */
-body.captura-bloqueada {
-  filter: blur(14px) brightness(0.9);
-  pointer-events: none;
-  user-select: none;
-}
-
-body.captura-bloqueada::after {
-  content: '👁 Contenido protegido';
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, .85);
-  color: #fff;
-  padding: .8rem 1.4rem;
-  border-radius: 8px;
-  font-family: system-ui, sans-serif;
-  font-size: .85rem;
-  letter-spacing: .05em;
-  z-index: 9999;
-  pointer-events: none;
-}
 
 /* ============================================================
    BOTÓN DE TEMA (común)
@@ -158,6 +132,7 @@ body.captura-bloqueada::after {
   inset: 0;
   background: rgba(0,0,0,.55);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .modal-caja {
@@ -181,6 +156,8 @@ body.captura-bloqueada::after {
   font-size: 1.6rem;
   color: var(--texto-suave);
   cursor: pointer;
+  padding: .2rem .5rem;
+  line-height: 1;
 }
 .modal-cerrar:hover { color: var(--acento); }
 
@@ -207,6 +184,7 @@ body.captura-bloqueada::after {
 .meta {
   font-size: .82rem;
   color: var(--texto-suave);
+  margin-bottom: .15rem;
 }
 
 .modal-sinopsis { margin-bottom: 1.5rem; }
