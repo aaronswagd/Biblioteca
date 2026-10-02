@@ -1,5 +1,5 @@
 /* ============================================================
-   TEMA GLOBAL + ANTI-CAPTURA
+   TEMA GLOBAL
    Se carga en todas las páginas del sitio.
    ============================================================ */
 
@@ -27,7 +27,6 @@
     }
   }
 
-  // Aplicar lo antes posible para evitar parpadeos
   const inicial = leerAjustes().tema || 'claro';
   aplicarTema(inicial);
 
@@ -43,7 +42,6 @@
       aplicarTema(siguiente);
       guardarTema(siguiente);
 
-      // Si estamos en el lector, sincronizar su objeto interno
       if (typeof window.sincronizarTemaLector === 'function') {
         window.sincronizarTemaLector(siguiente);
       }
@@ -51,44 +49,7 @@
   });
 })();
 
-/* ---------- Anti-captura: desenfoque al perder foco ---------- */
-(function () {
-  // En iOS Safari, 'blur' se dispara al tocar la barra de direcciones,
-  // al hacer scroll, etc. Por eso lo desactivamos en dispositivos
-  // táctiles / móviles. Solo funciona en escritorio.
-  const esTactil = ('ontouchstart' in window) ||
-                   (navigator.maxTouchPoints > 0);
-  const esMovil = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-  if (esTactil || esMovil) return;
-
-  const DURACION_MINIMA = 400;  // ms: ignora parpadeos rápidos
-  let ultimaPerdida = 0;
-
-  function desenfocar() {
-    document.body.classList.add('captura-bloqueada');
-  }
-  function enfocar() {
-    document.body.classList.remove('captura-bloqueada');
-  }
-
-  window.addEventListener('blur', () => {
-    ultimaPerdida = Date.now();
-    desenfocar();
-  });
-
-  window.addEventListener('focus', () => {
-    if (Date.now() - ultimaPerdida < DURACION_MINIMA) return;
-    enfocar();
-  });
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) desenfocar();
-    else enfocar();
-  });
-})();
-
-/* ---------- Bloqueos generales del sitio ---------- */
+/* ---------- Bloqueos generales (sin desenfoque) ---------- */
 (function () {
   // Clic derecho
   document.addEventListener('contextmenu', e => e.preventDefault());
@@ -107,9 +68,8 @@
         ['c', 'x', 'u', 's', 'p'].includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
-    // Impr Pant: intento de limpiar el portapapeles
+    // Impr Pant: limpiar portapapeles (por si acaso)
     if (e.key === 'PrintScreen') {
-      e.preventDefault();
       if (navigator.clipboard) navigator.clipboard.writeText('');
     }
   });
