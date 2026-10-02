@@ -53,7 +53,7 @@ function abrirModal(i) {
 
 /* ---------- Cerrar modal ---------- */
 modal.addEventListener('click', e => {
-  if (e.target.dataset.cerrar !== undefined) cerrarModal();
+  if (e.target.closest('[data-cerrar]')) cerrarModal();
 });
 
 document.addEventListener('keydown', e => {
