@@ -127,6 +127,10 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 1rem;
 }
 
+.modal[hidden] {
+   display: none !important;
+}
+   
 .modal-fondo {
   position: absolute;
   inset: 0;
