@@ -2,15 +2,21 @@
    LECTOR: carga de capítulos + ajustes de lectura
    ============================================================ */
 
-/* ---------- Parámetros de la URL ---------- */
 const params = new URLSearchParams(location.search);
 const slug = params.get('h');
 const capIdx = parseInt(params.get('c') || '0', 10);
 const historia = biblioteca.find(h => h.slug === slug);
 
-/* ---------- Cargar capítulo ---------- */
 if (!historia) {
-  document.body.innerHTML = '<p style="padding:2rem">Historia no encontrada.</p>';
+  document.body.innerHTML = `
+    <div style="padding:2rem;text-align:center;font-family:system-ui">
+      <p style="margin-bottom:1rem">Historia no encontrada.</p>
+      <p style="font-size:.9rem;color:#666;margin-bottom:1.5rem">
+        Vuelve a la biblioteca y elige un capítulo desde ahí.
+      </p>
+      <a href="index.html" style="color:#6b5b95">← Volver a la biblioteca</a>
+    </div>
+  `;
 } else {
   document.title = `${historia.capitulos[capIdx].titulo} — ${historia.titulo}`;
   document.getElementById('titulo-historia').textContent = historia.titulo;
@@ -29,7 +35,6 @@ if (!historia) {
         '<p>No se pudo cargar el capítulo. Verifica que el archivo exista.</p>';
     });
 
-  /* ---------- Navegación prev / next ---------- */
   const prev = document.getElementById('prev');
   const next = document.getElementById('next');
 
@@ -62,7 +67,6 @@ const fuentes = {
 function aplicar() {
   const r = document.documentElement;
 
-  // El tema lo maneja tema.js, pero mantenemos el objeto local sincronizado
   ajustes.tema = r.dataset.tema || ajustes.tema;
 
   r.style.setProperty('--fuente', fuentes[ajustes.fuente]);
@@ -70,7 +74,6 @@ function aplicar() {
   r.style.setProperty('--interlineado', ajustes.inter);
   r.style.setProperty('--ancho-lectura', ajustes.ancho + 'px');
 
-  // Actualizar valores visibles
   const vTam = document.getElementById('val-tamano');
   const vInt = document.getElementById('val-inter');
   const vAnc = document.getElementById('val-ancho');
@@ -78,7 +81,6 @@ function aplicar() {
   if (vInt) vInt.textContent = Number(ajustes.inter).toFixed(1);
   if (vAnc) vAnc.textContent = ajustes.ancho;
 
-  // Sincronizar sliders
   const rTam = document.getElementById('rango-tamano');
   const rInt = document.getElementById('rango-inter');
   const rAnc = document.getElementById('rango-ancho');
@@ -86,7 +88,6 @@ function aplicar() {
   if (rInt) rInt.value = ajustes.inter;
   if (rAnc) rAnc.value = ajustes.ancho;
 
-  // Marcar seleccionados
   document.querySelectorAll('.temas .swatch').forEach(b =>
     b.classList.toggle('activo', b.dataset.tema === ajustes.tema));
   document.querySelectorAll('.fuentes button').forEach(b =>
@@ -95,18 +96,16 @@ function aplicar() {
   localStorage.setItem(CLAVE, JSON.stringify(ajustes));
 }
 
-/* Exponer para que tema.js pueda sincronizar cuando cambie el tema global */
 window.sincronizarTemaLector = function (nuevoTema) {
   ajustes.tema = nuevoTema;
   document.querySelectorAll('.temas .swatch').forEach(b =>
     b.classList.toggle('activo', b.dataset.tema === nuevoTema));
 };
 
-/* ---------- Panel de ajustes ---------- */
 const panel = document.getElementById('panel-ajustes');
 const btnAjustes = document.getElementById('btn-ajustes');
 
-if (btnAjustes) {
+if (btnAjustes && panel) {
   btnAjustes.addEventListener('click', () => {
     panel.hidden = !panel.hidden;
   });
@@ -116,10 +115,8 @@ document.querySelectorAll('.temas .swatch').forEach(b => {
   b.addEventListener('click', () => {
     ajustes.tema = b.dataset.tema;
     document.documentElement.dataset.tema = ajustes.tema;
-    // Actualizar icono del botón de tema
     const icono = document.getElementById('icono-tema');
     if (icono) icono.textContent = (ajustes.tema === 'oscuro' || ajustes.tema === 'negro') ? '☀' : '☾';
-    // Guardar también en localStorage
     localStorage.setItem(CLAVE, JSON.stringify(ajustes));
     aplicar();
   });
@@ -133,23 +130,21 @@ document.querySelectorAll('.fuentes button').forEach(b => {
 });
 
 const rangoTamano = document.getElementById('rango-tamano');
-const rangoInter = document.getElementById('rango-inter');
-const rangoAncho = document.getElementById('rango-ancho');
+const rangoInter  = document.getElementById('rango-inter');
+const rangoAncho  = document.getElementById('rango-ancho');
 
 if (rangoTamano) rangoTamano.addEventListener('input', e => { ajustes.tamano = +e.target.value; aplicar(); });
 if (rangoInter)  rangoInter.addEventListener('input',  e => { ajustes.inter  = +e.target.value; aplicar(); });
 if (rangoAncho)  rangoAncho.addEventListener('input',  e => { ajustes.ancho  = +e.target.value; aplicar(); });
 
-/* Cerrar panel con Escape */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && panel && !panel.hidden) panel.hidden = true;
 });
 
-/* Aplicar ajustes al cargar */
 aplicar();
 
 /* ============================================================
-   ANTI-COPIA ESPECÍFICO DEL CONTENIDO
+   ANTI-COPIA DEL CONTENIDO
    ============================================================ */
 const contenido = document.getElementById('contenido');
 if (contenido) {
