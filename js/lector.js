@@ -64,6 +64,13 @@ const fuentes = {
   dislexia: "Verdana, sans-serif"
 };
 
+const iconosTema = {
+  claro:  '🌕',  
+  sepia:  '🌗',  
+  oscuro: '🌘',  
+  negro:  '🌑'   
+};
+
 function aplicar() {
   const r = document.documentElement;
 
@@ -100,6 +107,9 @@ window.sincronizarTemaLector = function (nuevoTema) {
   ajustes.tema = nuevoTema;
   document.querySelectorAll('.temas .swatch').forEach(b =>
     b.classList.toggle('activo', b.dataset.tema === nuevoTema));
+
+  const icono = document.getElementById('icono-tema');
+  if (icono) icono.textContent = iconosTema[nuevoTema] || iconosTema.claro;
 };
 
 const panel = document.getElementById('panel-ajustes');
@@ -115,8 +125,10 @@ document.querySelectorAll('.temas .swatch').forEach(b => {
   b.addEventListener('click', () => {
     ajustes.tema = b.dataset.tema;
     document.documentElement.dataset.tema = ajustes.tema;
+
     const icono = document.getElementById('icono-tema');
-    if (icono) icono.textContent = (ajustes.tema === 'oscuro' || ajustes.tema === 'negro') ? '☀' : '☾';
+    if (icono) icono.textContent = iconosTema[ajustes.tema] || iconosTema.claro;
+
     localStorage.setItem(CLAVE, JSON.stringify(ajustes));
     aplicar();
   });
