@@ -464,6 +464,41 @@ input[type="range"] {
 }
 
 /* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  max-width: 1100px;
+  margin: 5rem auto 2rem;
+  padding: 2rem 1.5rem 0;
+  border-top: 1px solid var(--borde);
+  text-align: center;
+  font-size: .8rem;
+  color: var(--texto-suave);
+  line-height: 1.8;
+}
+
+.footer-links a {
+  color: var(--texto-suave);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, color .2s;
+}
+.footer-links a:hover {
+  color: var(--texto);
+  border-bottom-color: var(--texto-suave);
+}
+
+.footer-lector {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--borde);
+  text-align: center;
+  font-size: .75rem;
+  color: var(--texto-suave);
+  opacity: .7;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 600px) {
