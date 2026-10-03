@@ -1,12 +1,366 @@
 /* ============================================================
-   MARCA DE AGUA
-   Aparece fija en la esquina inferior derecha del lector.
-   Sale en cualquier captura de pantalla, pero no molesta al leer.
+   VARIABLES Y TEMAS
    ============================================================ */
-.lector {
-  position: relative;
+:root {
+  --fondo: #fafafa;
+  --superficie: #ffffff;
+  --texto: #2b2b2b;
+  --texto-suave: #6b6b6b;
+  --borde: #e2e2e2;
+  --acento: #6b6b6b;
+  --fuente: Georgia, serif;
+  --tamano: 18px;
+  --interlineado: 1.8;
+  --ancho-lectura: 680px;
 }
 
+[data-tema="sepia"]  { --fondo:#f4ecd8; --superficie:#fbf6e9; --texto:#4a3f35; --texto-suave:#8a7a68; --borde:#e0d5bd; --acento:#8a7a68; }
+[data-tema="oscuro"] { --fondo:#1c1c1e; --superficie:#2a2a2c; --texto:#e4e4e6; --texto-suave:#9a9a9e; --borde:#3a3a3c; --acento:#9a9a9e; }
+[data-tema="negro"]  { --fondo:#000000; --superficie:#0d0d0d; --texto:#cfcfcf; --texto-suave:#7a7a7a; --borde:#222222; --acento:#7a7a7a; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Quita el flash morado/azul al tocar en móvil y los enlaces visitados morados */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+a,
+a:visited {
+  color: inherit;
+}
+
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: 'Helvetica Neue', system-ui, sans-serif;
+  line-height: 1.6;
+  transition: background .3s, color .3s;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ============================================================
+   BOTÓN DE TEMA (común)
+   ============================================================ */
+.btn-tema {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s, border-color .2s, color .2s, background .3s;
+}
+.btn-tema:hover {
+  transform: rotate(20deg);
+  border-color: var(--texto-suave);
+  color: var(--texto);
+}
+
+/* ============================================================
+   BIBLIOTECA
+   ============================================================ */
+.biblioteca {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.cabecera {
+  position: relative;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.cabecera .btn-tema {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.cabecera h1 {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: .05em;
+}
+
+.subtitulo {
+  color: var(--texto-suave);
+  font-size: .9rem;
+  margin-top: .3rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.8rem;
+}
+
+.tarjeta {
+  cursor: pointer;
+  transition: transform .2s;
+}
+.tarjeta:hover { transform: translateY(-4px); }
+
+.tarjeta img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  background: var(--borde);
+}
+
+.tarjeta h3 {
+  font-size: .85rem;
+  font-weight: 500;
+  margin-top: .6rem;
+  color: var(--texto);
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal[hidden] {
+  display: none !important;
+}
+
+.modal-fondo {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-caja {
+  position: relative;
+  background: var(--superficie);
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,.3);
+}
+
+.modal-cerrar {
+  position: absolute;
+  top: .8rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--texto-suave);
+  cursor: pointer;
+  padding: .2rem .5rem;
+  line-height: 1;
+  transition: color .2s, transform .2s;
+}
+.modal-cerrar:hover {
+  color: var(--texto);
+  transform: rotate(90deg);
+}
+
+.modal-cabecera {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-cabecera img {
+  width: 100px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.modal-cabecera h2 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: .4rem;
+}
+
+.meta {
+  font-size: .82rem;
+  color: var(--texto-suave);
+  margin-bottom: .15rem;
+}
+
+.modal-sinopsis { margin-bottom: 1.5rem; }
+
+.modal-sinopsis h4,
+.modal-capitulos h4 {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--texto-suave);
+  margin-bottom: .6rem;
+}
+
+.modal-sinopsis p {
+  font-size: .92rem;
+  line-height: 1.6;
+}
+
+.modal-capitulos ol { list-style: none; }
+
+.modal-capitulos li {
+  border-bottom: 1px solid var(--borde);
+}
+
+.modal-capitulos a {
+  display: block;
+  padding: .7rem 0;
+  color: var(--texto);
+  text-decoration: none;
+  font-size: .92rem;
+  transition: opacity .2s, padding-left .25s;
+}
+.modal-capitulos a:hover {
+  opacity: .6;
+  padding-left: .3rem;
+}
+
+/* ============================================================
+   LECTOR
+   ============================================================ */
+.lector-body { min-height: 100vh; }
+
+.barra-lector {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .8rem 1.2rem;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borde);
+  font-size: .85rem;
+  z-index: 50;
+  gap: 1rem;
+}
+
+.barra-lector a {
+  color: var(--texto-suave);
+  text-decoration: none;
+  transition: color .2s;
+}
+.barra-lector a:hover {
+  color: var(--texto);
+}
+
+.titulo-bar {
+  color: var(--texto-suave);
+  font-size: .8rem;
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acciones-lector {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.barra-lector .btn-tema {
+  width: 34px;
+  height: 34px;
+  font-size: .95rem;
+}
+
+.btn-ajustes {
+  background: none;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: .35rem .7rem;
+  font-size: .85rem;
+  color: var(--texto);
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.btn-ajustes:hover {
+  border-color: var(--texto-suave);
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+.lector {
+  position: relative;
+  max-width: var(--ancho-lectura);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  transition: max-width .2s ease;
+}
+
+.lector h1 {
+  font-family: var(--fuente);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.contenido-protegido {
+  font-family: var(--fuente);
+  font-size: var(--tamano);
+  line-height: var(--interlineado);
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  transition: font-size .15s ease, line-height .15s ease;
+}
+
+.contenido-protegido p { margin-bottom: 1.2em; }
+
+.nav-capitulos {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--borde);
+}
+
+.nav-btn {
+  color: var(--texto-suave);
+  text-decoration: none;
+  font-size: .9rem;
+  transition: color .2s, opacity .2s;
+}
+.nav-btn:hover {
+  color: var(--texto);
+  opacity: .85;
+}
+
+/* ============================================================
+   MARCA DE AGUA
+   Aparece fija en la esquina inferior derecha del lector.
+   Sale en cualquier captura, pero no molesta al leer.
+   ============================================================ */
 .lector::after {
   content: "aronswagd.github.io";
   position: fixed;
@@ -23,8 +377,108 @@
   z-index: 1;
 }
 
-/* En móvil, un poco más pequeña y pegada al borde */
+/* ============================================================
+   PANEL DE AJUSTES
+   ============================================================ */
+.panel-ajustes {
+  position: fixed;
+  top: 60px;
+  right: 1rem;
+  width: 280px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  z-index: 60;
+}
+
+.panel-ajustes h3 {
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--texto-suave);
+  margin-bottom: 1rem;
+}
+
+.grupo { margin-bottom: 1.2rem; }
+
+.grupo label {
+  display: block;
+  font-size: .8rem;
+  color: var(--texto-suave);
+  margin-bottom: .5rem;
+}
+
+.temas {
+  display: flex;
+  gap: .5rem;
+}
+
+.swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--c);
+  border: 2px solid var(--borde);
+  cursor: pointer;
+  position: relative;
+  transition: border-color .2s, transform .15s;
+}
+.swatch:hover { transform: scale(1.08); }
+
+.swatch::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--t);
+}
+
+.swatch.activo { border-color: var(--texto); }
+
+.fuentes {
+  display: flex;
+  gap: .4rem;
+}
+
+.fuentes button {
+  flex: 1;
+  padding: .4rem;
+  font-size: .75rem;
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  color: var(--texto);
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+.fuentes button.activo {
+  border-color: var(--texto);
+  color: var(--texto);
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--texto-suave);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 600px) {
+  .cabecera h1 { font-size: 1.6rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1.2rem; }
+  .modal-cabecera { flex-direction: column; }
+  .modal-cabecera img { width: 140px; margin: 0 auto; }
+  .panel-ajustes {
+    right: .5rem;
+    left: .5rem;
+    width: auto;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .titulo-bar { display: none; }
   .lector::after {
     font-size: .65rem;
     bottom: .6rem;
