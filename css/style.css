@@ -7,18 +7,28 @@
   --texto: #2b2b2b;
   --texto-suave: #6b6b6b;
   --borde: #e2e2e2;
-  --acento: #6b5b95;
+  --acento: #6b6b6b;
   --fuente: Georgia, serif;
   --tamano: 18px;
   --interlineado: 1.8;
   --ancho-lectura: 680px;
 }
 
-[data-tema="sepia"]  { --fondo:#f4ecd8; --superficie:#fbf6e9; --texto:#4a3f35; --texto-suave:#8a7a68; --borde:#e0d5bd; --acento:#8b6f47; }
-[data-tema="oscuro"] { --fondo:#1c1c1e; --superficie:#2a2a2c; --texto:#e4e4e6; --texto-suave:#9a9a9e; --borde:#3a3a3c; --acento:#b8a9e0; }
-[data-tema="negro"]  { --fondo:#000000; --superficie:#0d0d0d; --texto:#cfcfcf; --texto-suave:#7a7a7a; --borde:#222222; --acento:#b8a9e0; }
+[data-tema="sepia"]  { --fondo:#f4ecd8; --superficie:#fbf6e9; --texto:#4a3f35; --texto-suave:#8a7a68; --borde:#e0d5bd; --acento:#8a7a68; }
+[data-tema="oscuro"] { --fondo:#1c1c1e; --superficie:#2a2a2c; --texto:#e4e4e6; --texto-suave:#9a9a9e; --borde:#3a3a3c; --acento:#9a9a9e; }
+[data-tema="negro"]  { --fondo:#000000; --superficie:#0d0d0d; --texto:#cfcfcf; --texto-suave:#7a7a7a; --borde:#222222; --acento:#7a7a7a; }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+a,
+a:visited {
+  color: inherit;
+}
 
 body {
   background: var(--fondo);
@@ -31,7 +41,7 @@ body {
 img { max-width: 100%; height: auto; display: block; }
 
 /* ============================================================
-   BOTÓN DE TEMA (común)
+   BOTÓN DE TEMA
    ============================================================ */
 .btn-tema {
   width: 40px;
@@ -49,8 +59,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .btn-tema:hover {
   transform: rotate(20deg);
-  border-color: var(--acento);
-  color: var(--acento);
+  border-color: var(--texto-suave);
+  color: var(--texto);
 }
 
 /* ============================================================
@@ -128,9 +138,9 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .modal[hidden] {
-   display: none !important;
+  display: none !important;
 }
-   
+
 .modal-fondo {
   position: absolute;
   inset: 0;
@@ -162,8 +172,12 @@ img { max-width: 100%; height: auto; display: block; }
   cursor: pointer;
   padding: .2rem .5rem;
   line-height: 1;
+  transition: color .2s, transform .2s;
 }
-.modal-cerrar:hover { color: var(--acento); }
+.modal-cerrar:hover {
+  color: var(--texto);
+  transform: rotate(90deg);
+}
 
 .modal-cabecera {
   display: flex;
@@ -219,9 +233,12 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--texto);
   text-decoration: none;
   font-size: .92rem;
-  transition: color .2s;
+  transition: opacity .2s, padding-left .25s;
 }
-.modal-capitulos a:hover { color: var(--acento); }
+.modal-capitulos a:hover {
+  opacity: .6;
+  padding-left: .3rem;
+}
 
 /* ============================================================
    LECTOR
@@ -247,7 +264,9 @@ img { max-width: 100%; height: auto; display: block; }
   text-decoration: none;
   transition: color .2s;
 }
-.barra-lector a:hover { color: var(--acento); }
+.barra-lector a:hover {
+  color: var(--texto);
+}
 
 .titulo-bar {
   color: var(--texto-suave);
@@ -279,11 +298,12 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: .85rem;
   color: var(--texto);
   cursor: pointer;
-  transition: border-color .2s, color .2s;
+  transition: border-color .2s, color .2s, background .2s;
 }
 .btn-ajustes:hover {
-  border-color: var(--acento);
-  color: var(--acento);
+  border-color: var(--texto-suave);
+  color: var(--texto);
+  background: var(--fondo);
 }
 
 .lector {
@@ -324,11 +344,15 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .nav-btn {
-  color: var(--acento);
+  color: var(--texto-suave);
   text-decoration: none;
   font-size: .9rem;
+  transition: color .2s, opacity .2s;
 }
-.nav-btn:hover { text-decoration: underline; }
+.nav-btn:hover {
+  color: var(--texto);
+  opacity: .85;
+}
 
 /* ============================================================
    PANEL DE AJUSTES
@@ -388,7 +412,7 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--t);
 }
 
-.swatch.activo { border-color: var(--acento); }
+.swatch.activo { border-color: var(--texto); }
 
 .fuentes {
   display: flex;
@@ -407,13 +431,13 @@ img { max-width: 100%; height: auto; display: block; }
   transition: border-color .2s, color .2s;
 }
 .fuentes button.activo {
-  border-color: var(--acento);
-  color: var(--acento);
+  border-color: var(--texto);
+  color: var(--texto);
 }
 
 input[type="range"] {
   width: 100%;
-  accent-color: var(--acento);
+  accent-color: var(--texto-suave);
 }
 
 /* ============================================================
