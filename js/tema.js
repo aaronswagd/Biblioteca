@@ -7,6 +7,13 @@
   const CLAVE = 'ajustes-lectura';
   const temas = ['claro', 'sepia', 'oscuro', 'negro'];
 
+  const iconos = {
+    claro:  '🌕',  
+    sepia:  '🌗',  
+    oscuro: '🌘',  
+    negro:  '🌑'   
+  };
+
   function leerAjustes() {
     try { return JSON.parse(localStorage.getItem(CLAVE)) || {}; }
     catch { return {}; }
@@ -22,7 +29,7 @@
     document.documentElement.dataset.tema = tema;
     const icono = document.getElementById('icono-tema');
     if (icono) {
-      icono.textContent = (tema === 'oscuro' || tema === 'negro') ? '☀' : '☾';
+      icono.textContent = iconos[tema] || iconos.claro;
     }
   }
 
