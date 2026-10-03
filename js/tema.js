@@ -3,7 +3,6 @@
    Se carga en todas las páginas del sitio.
    ============================================================ */
 
-/* ---------- Tema compartido ---------- */
 (function () {
   const CLAVE = 'ajustes-lectura';
   const temas = ['claro', 'sepia', 'oscuro', 'negro'];
@@ -49,26 +48,23 @@
   });
 })();
 
-/* ---------- Bloqueos generales (sin desenfoque) ---------- */
+/* ---------- Bloqueos generales ---------- */
 (function () {
-  // Clic derecho
   document.addEventListener('contextmenu', e => e.preventDefault());
 
-  // Atajos de teclado peligrosos
   document.addEventListener('keydown', e => {
-    // F12
     if (e.key === 'F12') { e.preventDefault(); return; }
-    // Ctrl+Shift+I / J / C (DevTools)
+
     if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
         ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
-    // Ctrl+C / X / U / S / P
+
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey &&
         ['c', 'x', 'u', 's', 'p'].includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
-    // Impr Pant: limpiar portapapeles (por si acaso)
+
     if (e.key === 'PrintScreen') {
       if (navigator.clipboard) navigator.clipboard.writeText('');
     }
