@@ -362,6 +362,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-family: var(--fuente);
   font-size: var(--tamano);
   line-height: var(--interlineado);
+  text-align: justify;
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
