@@ -63,7 +63,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ============================================================
-   BIBLIOTECA (ESTANTERÍA MEJORADA)
+   BIBLIOTECA
    ============================================================ */
 .biblioteca {
   max-width: 1100px;
@@ -95,54 +95,43 @@ img { max-width: 100%; height: auto; display: block; }
   margin-top: .3rem;
 }
 
-/* Rejilla de la estantería */
+/* Rejilla limpia */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 2rem 1.8rem; 
-  padding-bottom: 0; /* Quitamos el espacio extra */
-  position: relative;
+  gap: 2.5rem 1.8rem; /* Espacio entre libros */
   margin-bottom: 2rem;
-  
-  /* AQUÍ CREAMOS LA REPISA REAL */
-  border-bottom: 14px solid #5c4033;
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 15px 25px -10px rgba(0,0,0,0.6);
-  align-items: end; /* Hace que los libros se apoyen en la madera */
 }
 
 /* El libro (tarjeta) */
 .tarjeta {
   cursor: pointer;
   transition: transform 0.3s ease;
-  position: relative;
-  z-index: 2;
-  margin-bottom: -14px; /* Metemos el libro un poquito en la madera para que no flote */
 }
 
 .tarjeta:hover { 
-  transform: translateY(-10px) rotate(-2deg);
+  transform: translateY(-6px); /* Se levanta un poquito, sin inclinarse */
 }
 
 .tarjeta img {
   width: 100%;
   aspect-ratio: 2/3;
   object-fit: cover;
-  border-radius: 2px 6px 6px 2px; 
+  border-radius: 2px 6px 6px 2px; /* Borde izquierdo recto, derecho redondeado */
   background: var(--borde);
   
-  /* EFECTO DE LOMO Y PROFUNDIDAD MÁS FUERTE */
+  /* Efecto 3D del lomo (sombra interna izquierda) */
   box-shadow: 
-    inset 10px 0 15px -6px rgba(0,0,0,0.8), /* Sombra interna muy oscura a la izquierda (el lomo) */
-    4px 6px 15px rgba(0,0,0,0.4);           /* Sombra exterior del libro */
-  border-left: 2px solid rgba(0,0,0,0.5);   /* Borde duro del lomo */
+    inset 8px 0 12px -5px rgba(0,0,0,0.7), 
+    3px 6px 12px rgba(0,0,0,.2); 
+  border-left: 1px solid rgba(0,0,0,0.3); 
   transition: box-shadow 0.3s ease;
 }
 
 .tarjeta:hover img {
   box-shadow: 
-    inset 10px 0 15px -6px rgba(0,0,0,0.8),
-    8px 15px 25px rgba(0,0,0,0.5); 
+    inset 8px 0 12px -5px rgba(0,0,0,0.7),
+    5px 10px 20px rgba(0,0,0,.3); 
 }
 
 .tarjeta h3 {
@@ -211,8 +200,8 @@ img { max-width: 100%; height: auto; display: block; }
   object-fit: cover;
   border-radius: 2px 6px 6px 2px;
   flex-shrink: 0;
-  box-shadow: 3px 4px 10px rgba(0,0,0,.2), inset 10px 0 15px -6px rgba(0,0,0,0.8);
-  border-left: 2px solid rgba(0,0,0,0.5);
+  box-shadow: inset 6px 0 10px -4px rgba(0,0,0,0.7), 2px 4px 8px rgba(0,0,0,.2);
+  border-left: 1px solid rgba(0,0,0,0.3);
 }
 
 .modal-cabecera h2 { font-size: 1.3rem; font-weight: 500; margin-bottom: .4rem; }
@@ -452,7 +441,7 @@ input[type="range"] { width: 100%; accent-color: var(--texto-suave); }
   
   .grid { 
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-    gap: 1.5rem 1.2rem; 
+    gap: 2rem 1.2rem; 
   }
   
   .modal-cabecera { flex-direction: column; }
