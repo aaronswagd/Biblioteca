@@ -358,11 +358,14 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--texto-suave);
 }
 
+/* ============================================================
+   TEXTO DEL LECTOR (Justificado y sin guiones)
+   ============================================================ */
 .contenido-protegido {
-  font-family: var(--fuente);
+  font-family: var(--fuente) !important;
   font-size: var(--tamano);
   line-height: var(--interlineado);
-  text-align: justify;
+  text-align: justify; /* Justifica el texto */
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -370,19 +373,15 @@ img { max-width: 100%; height: auto; display: block; }
   transition: font-size .15s ease, line-height .15s ease;
 }
 
-.contenido-protegido {
-  font-family: var(--fuente) !important; /* El !important fuerza el cambio de letra */
-  font-size: var(--tamano);
-  line-height: var(--interlineado);
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  transition: font-size .15s ease, line-height .15s ease;
+.contenido-protegido p { 
+  margin-bottom: 1.2em; 
+  text-align: justify; /* Asegura la justificación en cada párrafo */
+  text-justify: inter-word; /* Distribuye el espacio entre palabras */
 }
 
-.contenido-protegido p { margin-bottom: 1.2em; }
-
+/* ============================================================
+   NAVEGACIÓN DE CAPÍTULOS
+   ============================================================ */
 .nav-capitulos {
   display: flex;
   justify-content: space-between;
