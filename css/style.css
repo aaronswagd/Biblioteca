@@ -63,7 +63,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ============================================================
-   BIBLIOTECA (ESTANTERÍA)
+   BIBLIOTECA (ESTANTERÍA MEJORADA)
    ============================================================ */
 .biblioteca {
   max-width: 1100px;
@@ -99,23 +99,16 @@ img { max-width: 100%; height: auto; display: block; }
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 3rem 1.8rem; 
-  padding-bottom: 40px;
+  gap: 2rem 1.8rem; 
+  padding-bottom: 0; /* Quitamos el espacio extra */
   position: relative;
   margin-bottom: 2rem;
-}
-
-/* La repisa de madera */
-.grid::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: -10px;
-  right: -10px;
-  height: 14px;
-  background: linear-gradient(to bottom, #7b5c48, #4a3525);
-  border-radius: 4px;
-  box-shadow: 0 15px 20px -10px rgba(0,0,0,.5);
+  
+  /* AQUÍ CREAMOS LA REPISA REAL */
+  border-bottom: 14px solid #5c4033;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 15px 25px -10px rgba(0,0,0,0.6);
+  align-items: end; /* Hace que los libros se apoyen en la madera */
 }
 
 /* El libro (tarjeta) */
@@ -124,10 +117,11 @@ img { max-width: 100%; height: auto; display: block; }
   transition: transform 0.3s ease;
   position: relative;
   z-index: 2;
+  margin-bottom: -14px; /* Metemos el libro un poquito en la madera para que no flote */
 }
 
 .tarjeta:hover { 
-  transform: translateY(-12px) rotate(-2deg);
+  transform: translateY(-10px) rotate(-2deg);
 }
 
 .tarjeta img {
@@ -135,18 +129,20 @@ img { max-width: 100%; height: auto; display: block; }
   aspect-ratio: 2/3;
   object-fit: cover;
   border-radius: 2px 6px 6px 2px; 
-  box-shadow: 
-    3px 6px 15px rgba(0,0,0,.2), 
-    inset 4px 0 6px -2px rgba(0,0,0,.4);
   background: var(--borde);
-  border-left: 1px solid rgba(0,0,0,.2);
+  
+  /* EFECTO DE LOMO Y PROFUNDIDAD MÁS FUERTE */
+  box-shadow: 
+    inset 10px 0 15px -6px rgba(0,0,0,0.8), /* Sombra interna muy oscura a la izquierda (el lomo) */
+    4px 6px 15px rgba(0,0,0,0.4);           /* Sombra exterior del libro */
+  border-left: 2px solid rgba(0,0,0,0.5);   /* Borde duro del lomo */
   transition: box-shadow 0.3s ease;
 }
 
 .tarjeta:hover img {
   box-shadow: 
-    6px 15px 25px rgba(0,0,0,.35), 
-    inset 4px 0 6px -2px rgba(0,0,0,.4);
+    inset 10px 0 15px -6px rgba(0,0,0,0.8),
+    8px 15px 25px rgba(0,0,0,0.5); 
 }
 
 .tarjeta h3 {
@@ -170,9 +166,7 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 1rem;
 }
 
-.modal[hidden] {
-  display: none !important;
-}
+.modal[hidden] { display: none !important; }
 
 .modal-fondo {
   position: absolute;
@@ -207,16 +201,9 @@ img { max-width: 100%; height: auto; display: block; }
   line-height: 1;
   transition: color .2s, transform .2s;
 }
-.modal-cerrar:hover {
-  color: var(--texto);
-  transform: rotate(90deg);
-}
+.modal-cerrar:hover { color: var(--texto); transform: rotate(90deg); }
 
-.modal-cabecera {
-  display: flex;
-  gap: 1.2rem;
-  margin-bottom: 1.5rem;
-}
+.modal-cabecera { display: flex; gap: 1.2rem; margin-bottom: 1.5rem; }
 
 .modal-cabecera img {
   width: 100px;
@@ -224,26 +211,15 @@ img { max-width: 100%; height: auto; display: block; }
   object-fit: cover;
   border-radius: 2px 6px 6px 2px;
   flex-shrink: 0;
-  box-shadow: 3px 4px 10px rgba(0,0,0,.2), inset 4px 0 6px -2px rgba(0,0,0,.4);
-  border-left: 1px solid rgba(0,0,0,.2);
+  box-shadow: 3px 4px 10px rgba(0,0,0,.2), inset 10px 0 15px -6px rgba(0,0,0,0.8);
+  border-left: 2px solid rgba(0,0,0,0.5);
 }
 
-.modal-cabecera h2 {
-  font-size: 1.3rem;
-  font-weight: 500;
-  margin-bottom: .4rem;
-}
-
-.meta {
-  font-size: .82rem;
-  color: var(--texto-suave);
-  margin-bottom: .15rem;
-}
-
+.modal-cabecera h2 { font-size: 1.3rem; font-weight: 500; margin-bottom: .4rem; }
+.meta { font-size: .82rem; color: var(--texto-suave); margin-bottom: .15rem; }
 .modal-sinopsis { margin-bottom: 1.5rem; }
 
-.modal-sinopsis h4,
-.modal-capitulos h4 {
+.modal-sinopsis h4, .modal-capitulos h4 {
   font-size: .75rem;
   text-transform: uppercase;
   letter-spacing: .1em;
@@ -251,16 +227,9 @@ img { max-width: 100%; height: auto; display: block; }
   margin-bottom: .6rem;
 }
 
-.modal-sinopsis p {
-  font-size: .92rem;
-  line-height: 1.6;
-}
-
+.modal-sinopsis p { font-size: .92rem; line-height: 1.6; }
 .modal-capitulos ol { list-style: none; }
-
-.modal-capitulos li {
-  border-bottom: 1px solid var(--borde);
-}
+.modal-capitulos li { border-bottom: 1px solid var(--borde); }
 
 .modal-capitulos a {
   display: block;
@@ -270,10 +239,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: .92rem;
   transition: opacity .2s, padding-left .25s;
 }
-.modal-capitulos a:hover {
-  opacity: .6;
-  padding-left: .3rem;
-}
+.modal-capitulos a:hover { opacity: .6; padding-left: .3rem; }
 
 /* ============================================================
    LECTOR
@@ -294,14 +260,8 @@ img { max-width: 100%; height: auto; display: block; }
   gap: 1rem;
 }
 
-.barra-lector a {
-  color: var(--texto-suave);
-  text-decoration: none;
-  transition: color .2s;
-}
-.barra-lector a:hover {
-  color: var(--texto);
-}
+.barra-lector a { color: var(--texto-suave); text-decoration: none; transition: color .2s; }
+.barra-lector a:hover { color: var(--texto); }
 
 .titulo-bar {
   color: var(--texto-suave);
@@ -313,17 +273,8 @@ img { max-width: 100%; height: auto; display: block; }
   white-space: nowrap;
 }
 
-.acciones-lector {
-  display: flex;
-  gap: .5rem;
-  align-items: center;
-}
-
-.barra-lector .btn-tema {
-  width: 34px;
-  height: 34px;
-  font-size: .95rem;
-}
+.acciones-lector { display: flex; gap: .5rem; align-items: center; }
+.barra-lector .btn-tema { width: 34px; height: 34px; font-size: .95rem; }
 
 .btn-ajustes {
   background: none;
@@ -335,11 +286,7 @@ img { max-width: 100%; height: auto; display: block; }
   cursor: pointer;
   transition: border-color .2s, color .2s, background .2s;
 }
-.btn-ajustes:hover {
-  border-color: var(--texto-suave);
-  color: var(--texto);
-  background: var(--fondo);
-}
+.btn-ajustes:hover { border-color: var(--texto-suave); color: var(--texto); background: var(--fondo); }
 
 .lector {
   position: relative;
@@ -358,14 +305,12 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--texto-suave);
 }
 
-/* ============================================================
-   TEXTO DEL LECTOR (Justificado y sin guiones)
-   ============================================================ */
+/* TEXTO DEL LECTOR (Justificado y sin guiones) */
 .contenido-protegido {
   font-family: var(--fuente) !important;
   font-size: var(--tamano);
   line-height: var(--interlineado);
-  text-align: justify; /* Justifica el texto */
+  text-align: justify;
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -375,13 +320,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 .contenido-protegido p { 
   margin-bottom: 1.2em; 
-  text-align: justify; /* Asegura la justificación en cada párrafo */
-  text-justify: inter-word; /* Distribuye el espacio entre palabras */
+  text-align: justify;
+  text-justify: inter-word;
 }
 
-/* ============================================================
-   NAVEGACIÓN DE CAPÍTULOS
-   ============================================================ */
 .nav-capitulos {
   display: flex;
   justify-content: space-between;
@@ -390,16 +332,8 @@ img { max-width: 100%; height: auto; display: block; }
   border-top: 1px solid var(--borde);
 }
 
-.nav-btn {
-  color: var(--texto-suave);
-  text-decoration: none;
-  font-size: .9rem;
-  transition: color .2s, opacity .2s;
-}
-.nav-btn:hover {
-  color: var(--texto);
-  opacity: .85;
-}
+.nav-btn { color: var(--texto-suave); text-decoration: none; font-size: .9rem; transition: color .2s, opacity .2s; }
+.nav-btn:hover { color: var(--texto); opacity: .85; }
 
 /* ============================================================
    MARCA DE AGUA
@@ -445,18 +379,9 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .grupo { margin-bottom: 1.2rem; }
+.grupo label { display: block; font-size: .8rem; color: var(--texto-suave); margin-bottom: .5rem; }
 
-.grupo label {
-  display: block;
-  font-size: .8rem;
-  color: var(--texto-suave);
-  margin-bottom: .5rem;
-}
-
-.temas {
-  display: flex;
-  gap: .5rem;
-}
+.temas { display: flex; gap: .5rem; }
 
 .swatch {
   width: 34px;
@@ -469,22 +394,10 @@ img { max-width: 100%; height: auto; display: block; }
   transition: border-color .2s, transform .15s;
 }
 .swatch:hover { transform: scale(1.08); }
-
-.swatch::after {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  background: var(--t);
-}
-
+.swatch::after { content: ''; position: absolute; inset: 8px; border-radius: 50%; background: var(--t); }
 .swatch.activo { border-color: var(--texto); }
 
-.fuentes {
-  display: flex;
-  gap: .4rem;
-}
-
+.fuentes { display: flex; gap: .4rem; }
 .fuentes button {
   flex: 1;
   padding: .4rem;
@@ -496,15 +409,8 @@ img { max-width: 100%; height: auto; display: block; }
   cursor: pointer;
   transition: border-color .2s, color .2s;
 }
-.fuentes button.activo {
-  border-color: var(--texto);
-  color: var(--texto);
-}
-
-input[type="range"] {
-  width: 100%;
-  accent-color: var(--texto-suave);
-}
+.fuentes button.activo { border-color: var(--texto); color: var(--texto); }
+input[type="range"] { width: 100%; accent-color: var(--texto-suave); }
 
 /* ============================================================
    FOOTER
@@ -526,10 +432,7 @@ input[type="range"] {
   border-bottom: 1px solid transparent;
   transition: border-color .2s, color .2s;
 }
-.footer-links a:hover {
-  color: var(--texto);
-  border-bottom-color: var(--texto-suave);
-}
+.footer-links a:hover { color: var(--texto); border-bottom-color: var(--texto-suave); }
 
 .footer-lector {
   margin-top: 4rem;
@@ -542,14 +445,14 @@ input[type="range"] {
 }
 
 /* ============================================================
-   RESPONSIVE (Para móviles y tablets)
+   RESPONSIVE
    ============================================================ */
 @media (max-width: 600px) {
   .cabecera h1 { font-size: 1.6rem; }
   
   .grid { 
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-    gap: 2rem 1.2rem; 
+    gap: 1.5rem 1.2rem; 
   }
   
   .modal-cabecera { flex-direction: column; }
