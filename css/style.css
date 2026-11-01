@@ -369,6 +369,17 @@ img { max-width: 100%; height: auto; display: block; }
   transition: font-size .15s ease, line-height .15s ease;
 }
 
+.contenido-protegido {
+  font-family: var(--fuente) !important; /* El !important fuerza el cambio de letra */
+  font-size: var(--tamano);
+  line-height: var(--interlineado);
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  transition: font-size .15s ease, line-height .15s ease;
+}
+
 .contenido-protegido p { margin-bottom: 1.2em; }
 
 .nav-capitulos {
