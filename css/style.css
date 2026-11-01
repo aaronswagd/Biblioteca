@@ -20,14 +20,12 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Quita el flash morado/azul al tocar en móvil y los enlaces visitados morados */
 html {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
 
-a,
-a:visited {
+a, a:visited {
   color: inherit;
 }
 
@@ -65,7 +63,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ============================================================
-   BIBLIOTECA
+   BIBLIOTECA (ESTANTERÍA)
    ============================================================ */
 .biblioteca {
   max-width: 1100px;
@@ -97,32 +95,66 @@ img { max-width: 100%; height: auto; display: block; }
   margin-top: .3rem;
 }
 
+/* Rejilla de la estantería */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1.8rem;
+  gap: 3rem 1.8rem; 
+  padding-bottom: 40px;
+  position: relative;
+  margin-bottom: 2rem;
 }
 
+/* La repisa de madera */
+.grid::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -10px;
+  right: -10px;
+  height: 14px;
+  background: linear-gradient(to bottom, #7b5c48, #4a3525);
+  border-radius: 4px;
+  box-shadow: 0 15px 20px -10px rgba(0,0,0,.5);
+}
+
+/* El libro (tarjeta) */
 .tarjeta {
   cursor: pointer;
-  transition: transform .2s;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
 }
-.tarjeta:hover { transform: translateY(-4px); }
+
+.tarjeta:hover { 
+  transform: translateY(-12px) rotate(-2deg);
+}
 
 .tarjeta img {
   width: 100%;
   aspect-ratio: 2/3;
   object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  border-radius: 2px 6px 6px 2px; 
+  box-shadow: 
+    3px 6px 15px rgba(0,0,0,.2), 
+    inset 4px 0 6px -2px rgba(0,0,0,.4);
   background: var(--borde);
+  border-left: 1px solid rgba(0,0,0,.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.tarjeta:hover img {
+  box-shadow: 
+    6px 15px 25px rgba(0,0,0,.35), 
+    inset 4px 0 6px -2px rgba(0,0,0,.4);
 }
 
 .tarjeta h3 {
   font-size: .85rem;
   font-weight: 500;
-  margin-top: .6rem;
+  margin-top: .8rem;
   color: var(--texto);
+  text-align: center;
 }
 
 /* ============================================================
@@ -190,8 +222,10 @@ img { max-width: 100%; height: auto; display: block; }
   width: 100px;
   aspect-ratio: 2/3;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 2px 6px 6px 2px;
   flex-shrink: 0;
+  box-shadow: 3px 4px 10px rgba(0,0,0,.2), inset 4px 0 6px -2px rgba(0,0,0,.4);
+  border-left: 1px solid rgba(0,0,0,.2);
 }
 
 .modal-cabecera h2 {
@@ -358,8 +392,6 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ============================================================
    MARCA DE AGUA
-   Aparece fija en la esquina inferior derecha del lector.
-   Sale en cualquier captura, pero no molesta al leer.
    ============================================================ */
 .lector::after {
   content: "aronswagd.github.io";
@@ -499,13 +531,19 @@ input[type="range"] {
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE (Para móviles y tablets)
    ============================================================ */
 @media (max-width: 600px) {
   .cabecera h1 { font-size: 1.6rem; }
-  .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1.2rem; }
+  
+  .grid { 
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+    gap: 2rem 1.2rem; 
+  }
+  
   .modal-cabecera { flex-direction: column; }
   .modal-cabecera img { width: 140px; margin: 0 auto; }
+  
   .panel-ajustes {
     right: .5rem;
     left: .5rem;
@@ -513,7 +551,9 @@ input[type="range"] {
     max-width: 340px;
     margin: 0 auto;
   }
+  
   .titulo-bar { display: none; }
+  
   .lector::after {
     font-size: .65rem;
     bottom: .6rem;
