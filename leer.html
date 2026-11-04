@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leyendo…</title>
-  <link rel="stylesheet" href="css/style.css?v=13">
+  <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body class="lector-body">
   <header class="barra-lector">
     <a href="index.html" class="volver">← Biblioteca</a>
     <span id="titulo-historia" class="titulo-bar"></span>
     <div class="acciones-lector">
+      
+      <!-- BOTÓN DE AUDIOLIBRO AÑADIDO AQUÍ -->
+      <button id="btn-audio" class="btn-ajustes" aria-label="Escuchar capítulo" style="font-size: 1rem;">🎧</button>
+      
       <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">
         <span id="icono-tema">🌕</span>
       </button>
@@ -70,8 +74,9 @@
     <p>© 2026 m4tvli · Prohibida su reproducción sin permiso</p>
   </footer>
 
-  <script src="js/datos.js?v=11"></script>
-  <script src="js/tema.js?v=10"></script>
-  <script src="js/lector.js?v=10"></script>
+  <!-- Scripts con versiones actualizadas para evitar caché -->
+  <script src="js/datos.js?v=12"></script>
+  <script src="js/tema.js?v=12"></script>
+  <script src="js/lector.js?v=12"></script>
 </body>
 </html>
