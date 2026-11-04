@@ -164,3 +164,83 @@ if (contenido) {
     contenido.addEventListener(evt, e => e.preventDefault());
   });
 }
+
+/* ============================================================
+   AUDIOLIBRO (Texto a voz) - AGREGADO AL FINAL
+   ============================================================ */
+const btnAudio = document.getElementById('btn-audio');
+let leyendo = false;
+let parrafosAudio = [];
+let parrafoActualAudio = 0;
+
+if (btnAudio) {
+  btnAudio.addEventListener('click', () => {
+    if (!('speechSynthesis' in window)) {
+      alert("Tu navegador no soporta la función de audiolibro.");
+      return;
+    }
+
+    if (leyendo) {
+      // Si ya está leyendo, lo detenemos
+      window.speechSynthesis.cancel();
+      btnAudio.textContent = '🎧';
+      leyendo = false;
+    } else {
+      // Si no está leyendo, empezamos
+      const contenedor = document.getElementById('contenido');
+      if (!contenedor) return;
+
+      // Agarramos todos los párrafos (<p>)
+      parrafosAudio = Array.from(contenedor.querySelectorAll('p'));
+      
+      if (parrafosAudio.length === 0) {
+        alert("El capítulo aún no se ha cargado o no tiene texto.");
+        return;
+      }
+
+      parrafoActualAudio = 0;
+      leyendo = true;
+      btnAudio.textContent = '⏹️'; // Cambia el ícono a "Stop"
+      
+      leerSiguienteParrafoAudio();
+    }
+  });
+}
+
+function leerSiguienteParrafoAudio() {
+  // Si ya terminamos todos los párrafos, nos detenemos
+  if (parrafoActualAudio >= parrafosAudio.length || !leyendo) {
+    if (btnAudio) btnAudio.textContent = '🎧';
+    leyendo = false;
+    return;
+  }
+
+  const texto = parrafosAudio[parrafoActualAudio].innerText;
+  
+  // Si el párrafo está vacío, pasamos al siguiente
+  if (!texto.trim()) {
+    parrafoActualAudio++;
+    leerSiguienteParrafoAudio();
+    return;
+  }
+
+  // Creamos el objeto de voz
+  const utterance = new SpeechSynthesisUtterance(texto);
+  utterance.lang = 'es-ES'; // Fuerza el idioma español
+  utterance.rate = 1;       // Velocidad (1 es normal)
+  utterance.pitch = 1;      // Tono de voz
+
+  // Cuando termina de leer un párrafo, salta automáticamente al siguiente
+  utterance.onend = () => {
+    parrafoActualAudio++;
+    leerSiguienteParrafoAudio();
+  };
+
+  // Inicia la lectura
+  window.speechSynthesis.speak(utterance);
+}
+
+// Si el usuario cambia de página o capítulo, detenemos el audio
+window.addEventListener('beforeunload', () => {
+  window.speechSynthesis.cancel();
+});
