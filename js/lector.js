@@ -166,13 +166,15 @@ if (contenido) {
 }
 
 /* ============================================================
-   AUDIOLIBRO (Texto a voz) - CON PAUSA Y REANUDACIÓN
+   AUDIOLIBRO (Texto a voz) - CON PAUSA EXACTA
    ============================================================ */
 const btnAudio = document.getElementById('btn-audio');
-let reproduciendo = false; // Indica si hay un audio activo
-let pausado = false;       // Indica si está en pausa
+let reproduciendo = false; 
+let pausado = false;       
 let parrafosAudio = [];
 let parrafoActualAudio = 0;
+let textoRestante = ""; // Guarda el texto exacto que falta por leer
+let utteranceActual = null;
 
 if (btnAudio) {
   btnAudio.addEventListener('click', () => {
@@ -183,18 +185,18 @@ if (btnAudio) {
 
     if (reproduciendo) {
       if (pausado) {
-        // REANUDAR: Continúa exactamente donde se quedó
-        window.speechSynthesis.resume();
-        btnAudio.textContent = '⏸️'; // Ícono de pausa
+        // REANUDAR: Lee el texto que quedó pendiente
         pausado = false;
+        btnAudio.textContent = '⏸️';
+        reproducirTexto(textoRestante);
       } else {
-        // PAUSAR: Se detiene, pero guarda la posición
-        window.speechSynthesis.pause();
-        btnAudio.textContent = '▶️'; // Ícono de play
+        // PAUSAR: Detiene el audio y guarda la posición
         pausado = true;
+        btnAudio.textContent = '▶️';
+        window.speechSynthesis.cancel(); 
       }
     } else {
-      // INICIAR: Empieza desde el principio (solo cuando no hay nada cargado)
+      // INICIAR: Empieza todo desde cero
       const contenedor = document.getElementById('contenido');
       if (!contenedor) return;
 
@@ -206,17 +208,14 @@ if (btnAudio) {
       pausado = false;
       btnAudio.textContent = '⏸️'; 
       
-      leerSiguienteParrafoAudio();
+      prepararParrafo();
     }
   });
 }
 
-function leerSiguienteParrafoAudio() {
-  // Si terminamos o el usuario detuvo la lectura
+function prepararParrafo() {
   if (parrafoActualAudio >= parrafosAudio.length || !reproduciendo) {
-    if (btnAudio) btnAudio.textContent = '🎧';
-    reproduciendo = false;
-    pausado = false;
+    detenerTodo();
     return;
   }
 
@@ -224,28 +223,49 @@ function leerSiguienteParrafoAudio() {
   
   if (!texto.trim()) {
     parrafoActualAudio++;
-    leerSiguienteParrafoAudio();
+    prepararParrafo();
     return;
   }
 
-  const utterance = new SpeechSynthesisUtterance(texto);
-  utterance.lang = 'es-ES';
-  utterance.rate = 1;
-  utterance.pitch = 1;
+  textoRestante = texto; // Guardamos el texto completo del párrafo
+  reproducirTexto(textoRestante);
+}
 
-  // Cuando termina este párrafo, salta al siguiente (solo si no está pausado)
-  utterance.onend = () => {
-    if (reproduciendo && !pausado) {
-      parrafoActualAudio++;
-      leerSiguienteParrafoAudio();
+function reproducirTexto(texto) {
+  if (!texto) return;
+  
+  utteranceActual = new SpeechSynthesisUtterance(texto);
+  utteranceActual.lang = 'es-ES';
+  utteranceActual.rate = 1;
+  utteranceActual.pitch = 1;
+
+  // MAGIA AQUÍ: Cada vez que el lector avanza una palabra, guardamos la posición
+  utteranceActual.onboundary = (event) => {
+    if (event.name === 'word' || event.name === 'sentence') {
+      textoRestante = texto.substring(event.charIndex);
     }
   };
 
-  window.speechSynthesis.speak(utterance);
+  // Cuando termina el párrafo, pasa al siguiente
+  utteranceActual.onend = () => {
+    if (!pausado && reproduciendo) {
+      parrafoActualAudio++;
+      prepararParrafo();
+    }
+  };
+
+  window.speechSynthesis.speak(utteranceActual);
 }
 
-// Botón de detener (opcional): Si quieres un botón para detenerlo del todo y reiniciar
-// Si no, al cambiar de capítulo se detiene solo.
+function detenerTodo() {
+  if (btnAudio) btnAudio.textContent = '🎧';
+  reproduciendo = false;
+  pausado = false;
+  textoRestante = "";
+  window.speechSynthesis.cancel();
+}
+
+// Si el usuario cambia de página, detenemos el audio
 window.addEventListener('beforeunload', () => {
   window.speechSynthesis.cancel();
 });
