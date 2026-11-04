@@ -166,10 +166,11 @@ if (contenido) {
 }
 
 /* ============================================================
-   AUDIOLIBRO (Texto a voz) - AGREGADO AL FINAL
+   AUDIOLIBRO (Texto a voz) - CON PAUSA Y REANUDACIÓN
    ============================================================ */
 const btnAudio = document.getElementById('btn-audio');
-let leyendo = false;
+let reproduciendo = false; // Indica si hay un audio activo
+let pausado = false;       // Indica si está en pausa
 let parrafosAudio = [];
 let parrafoActualAudio = 0;
 
@@ -180,27 +181,30 @@ if (btnAudio) {
       return;
     }
 
-    if (leyendo) {
-      // Si ya está leyendo, lo detenemos
-      window.speechSynthesis.cancel();
-      btnAudio.textContent = '🎧';
-      leyendo = false;
+    if (reproduciendo) {
+      if (pausado) {
+        // REANUDAR: Continúa exactamente donde se quedó
+        window.speechSynthesis.resume();
+        btnAudio.textContent = '⏸️'; // Ícono de pausa
+        pausado = false;
+      } else {
+        // PAUSAR: Se detiene, pero guarda la posición
+        window.speechSynthesis.pause();
+        btnAudio.textContent = '▶️'; // Ícono de play
+        pausado = true;
+      }
     } else {
-      // Si no está leyendo, empezamos
+      // INICIAR: Empieza desde el principio (solo cuando no hay nada cargado)
       const contenedor = document.getElementById('contenido');
       if (!contenedor) return;
 
-      // Agarramos todos los párrafos (<p>)
       parrafosAudio = Array.from(contenedor.querySelectorAll('p'));
-      
-      if (parrafosAudio.length === 0) {
-        alert("El capítulo aún no se ha cargado o no tiene texto.");
-        return;
-      }
+      if (parrafosAudio.length === 0) return;
 
       parrafoActualAudio = 0;
-      leyendo = true;
-      btnAudio.textContent = '⏹️'; // Cambia el ícono a "Stop"
+      reproduciendo = true;
+      pausado = false;
+      btnAudio.textContent = '⏸️'; 
       
       leerSiguienteParrafoAudio();
     }
@@ -208,39 +212,40 @@ if (btnAudio) {
 }
 
 function leerSiguienteParrafoAudio() {
-  // Si ya terminamos todos los párrafos, nos detenemos
-  if (parrafoActualAudio >= parrafosAudio.length || !leyendo) {
+  // Si terminamos o el usuario detuvo la lectura
+  if (parrafoActualAudio >= parrafosAudio.length || !reproduciendo) {
     if (btnAudio) btnAudio.textContent = '🎧';
-    leyendo = false;
+    reproduciendo = false;
+    pausado = false;
     return;
   }
 
   const texto = parrafosAudio[parrafoActualAudio].innerText;
   
-  // Si el párrafo está vacío, pasamos al siguiente
   if (!texto.trim()) {
     parrafoActualAudio++;
     leerSiguienteParrafoAudio();
     return;
   }
 
-  // Creamos el objeto de voz
   const utterance = new SpeechSynthesisUtterance(texto);
-  utterance.lang = 'es-ES'; // Fuerza el idioma español
-  utterance.rate = 1;       // Velocidad (1 es normal)
-  utterance.pitch = 1;      // Tono de voz
+  utterance.lang = 'es-ES';
+  utterance.rate = 1;
+  utterance.pitch = 1;
 
-  // Cuando termina de leer un párrafo, salta automáticamente al siguiente
+  // Cuando termina este párrafo, salta al siguiente (solo si no está pausado)
   utterance.onend = () => {
-    parrafoActualAudio++;
-    leerSiguienteParrafoAudio();
+    if (reproduciendo && !pausado) {
+      parrafoActualAudio++;
+      leerSiguienteParrafoAudio();
+    }
   };
 
-  // Inicia la lectura
   window.speechSynthesis.speak(utterance);
 }
 
-// Si el usuario cambia de página o capítulo, detenemos el audio
+// Botón de detener (opcional): Si quieres un botón para detenerlo del todo y reiniciar
+// Si no, al cambiar de capítulo se detiene solo.
 window.addEventListener('beforeunload', () => {
   window.speechSynthesis.cancel();
 });
