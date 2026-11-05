@@ -14,7 +14,8 @@ const biblioteca = [
       { titulo: "Prólogo",                    archivo: "historias/tlh/1.html" },
       { titulo: "Capítulo 1: Jeoseung Saja",  archivo: "historias/tlh/2.html" },
       { titulo: "Capítulo 2: Jiwoon",         archivo: "historias/tlh/3.html" },
-      { titulo: "Capítulo 3: Castigo",        archivo: "historias/tlh/4.html" }
+      { titulo: "Capítulo 3: Castigo",        archivo: "historias/tlh/4.html" },
+      { titulo: "Capítulo 4: Amja",           archivo: "historias/tlh/5.html" },
     ]
   }
 ];
