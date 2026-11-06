@@ -16,6 +16,7 @@ const biblioteca = [
       { titulo: "Capítulo 2: Jiwoon",         archivo: "historias/tlh/3.html" },
       { titulo: "Capítulo 3: Castigo",        archivo: "historias/tlh/4.html" },
       { titulo: "Capítulo 4: Amja",           archivo: "historias/tlh/5.html" },
+      { titulo: "Capítulo 5: El primer paso",           archivo: "historias/tlh/6.html" },
     ]
   }
 ];
